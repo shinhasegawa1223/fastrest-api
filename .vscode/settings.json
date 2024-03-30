@@ -3,5 +3,5 @@
     "editor.defaultFormatter": "ms-python.autopep8"
   },
   "python.formatting.provider": "none",
-  "cSpell.words": ["Xperia"]
+  "cSpell.words": ["pydantic", "Xperia"]
 }

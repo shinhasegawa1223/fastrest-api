@@ -1,34 +1,37 @@
-from fastapi import APIRouter, Body
+from typing import Optional
+from fastapi import APIRouter, Path, Query
 from cruds import item as item_cruds
+from schemas import ItemCreate, ItemUpdate, ItemResponse
+
 
 router = APIRouter(prefix="/items", tags=["Items"])
 
 
-@router.get("")
+@router.get("", response_model=list[ItemResponse])
 async def find_add():
     return item_cruds.find_all()
 
 
-@router.get("/{id}")
-async def find_by_id(id: int):
+@router.get("/{id}", response_model=Optional[ItemResponse])
+async def find_by_id(id: int = Path(gt=0)):
     return item_cruds.find_by_id(id)
 
 
-@router.get("/")
-async def find_by_name(name: str):
+@router.get("/", response_model=list[ItemResponse])
+async def find_by_name(name: str = Query(min_length=2, max_length=20)):
     return item_cruds.find_by_name(name)
 
 
-@router.post("")
-async def create(item_create=Body()):
+@router.post("", response_model=ItemResponse)
+async def create(item_create: ItemCreate):
     return item_cruds.create(item_create)
 
 
-@router.put("/{id}")
-async def create(id: int, item_update=Body()):
+@router.put("/{id}", response_model=Optional[ItemResponse])
+async def create(item_update: ItemUpdate, id: int = Path(gt=0),):
     return item_cruds.update(id, item_update)
 
 
-@router.delete("/{id}")
-async def delete(id: int):
+@router.delete("/{id}", response_model=Optional[ItemResponse])
+async def delete(id: int = Path(gt=0),):
     return item_cruds.delete(id)
